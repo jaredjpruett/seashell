@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
 
 		if(foo == 'R') recurse = 1;
 	}
-	
+
 	if(argc != opts + 3) {
 		fprintf(stderr, "mycp only supports one source and one destination :\\\n");
 		exit(1);
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 		fprintf(stderr, "mycp: cannot stat \"%s\": No such file or directory\n", argv[opts + 1]);
 		exit(2);
 	};
-	
+
 	if(S_ISDIR(st.st_mode))
 		source_type = 1;
 
@@ -121,11 +121,8 @@ int mycp(const char *to, const char *from)
 	stat(from, &st);
 
 	fd_from = open(from, O_RDONLY);
-<<<<<<< HEAD:src/mycp.c
 	if(fd_from < 0){ perror("mycp failed due to: "); return -1; }
-=======
 	if(fd_from < 0) { fprintf(stderr, "mycp: cannot open \"%s\" for reading: %s\n", from, strerror(errno)); return -1; }
->>>>>>> e508cd2aadb2ee25ff6bcf88a370b98ca9811801:src/mycp/mycp.c
 
 	fd_to = open(to, O_WRONLY | O_CREAT | O_TRUNC, st.st_mode);
 	if(fd_to < 0) { fprintf(stderr, "mycp: cannot open \"%s\" for writing: %s\n", from, strerror(errno)); goto error; }
