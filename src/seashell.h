@@ -1,5 +1,5 @@
-#ifndef __SANGSCH_H
-#define __SANGSCH_H
+#ifndef __SEASHELL_H
+#define __SEASHELL_H
 
 #include <stdlib.h>
 #include <unistd.h>

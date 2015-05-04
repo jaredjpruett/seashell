@@ -1,4 +1,4 @@
-#include "sangsch.h"
+#include "seashell.h"
 
 /* Functions for printing to shell */
 void printWelcomeScreen();
@@ -294,7 +294,7 @@ void printWelcomeScreen()
 {
     int i;
     printf("\n-------------------------------------------------\n");
-    printf(ANSI_COLOR_GREEN "\tsangsch designed and implemented by: \n" ANSI_COLOR_RESET);
+    printf(ANSI_COLOR_GREEN "\tseashell designed and implemented by: \n" ANSI_COLOR_RESET);
     for (i = 0; people[i] != NULL; ++i)
         printf(ANSI_COLOR_BLUE "\t\t%s\n", people[i]);
     printf(ANSI_COLOR_RESET "-------------------------------------------------\n");

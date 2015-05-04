@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -g
 SRC = src
-PROGS = $(SRC)/mycat $(SRC)/myls $(SRC)/mycp $(SRC)/sangsch
+PROGS = $(SRC)/mycat $(SRC)/myls $(SRC)/mycp $(SRC)/seashell
 
 all: $(PROGS) 
 	
