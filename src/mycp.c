@@ -11,6 +11,8 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
+#define BUFFER_SIZE 1024
+
 int walk(const char *, const struct stat *, int, struct FTW *);
 int mycp(const char *, const char *);
 
@@ -22,9 +24,9 @@ int true_r = 0;
 
 int main(int argc, char *argv[])
 {
-	char replace[1024] = "";
-	char shaved1[1024] = "";
-	char shaved2[1024] = "";
+	char replace[BUFFER_SIZE] = "";
+	char shaved1[BUFFER_SIZE] = "";
+	char shaved2[BUFFER_SIZE] = "";
 	struct stat st, st1;
 	char *source;
 	char foo = 0;
@@ -125,7 +127,7 @@ int mycp(const char *to, const char *from)
 	if(fd_from < 0) { fprintf(stderr, "mycp: cannot open \"%s\" for reading: %s\n", from, strerror(errno)); return -1; }
 
 	fd_to = open(to, O_WRONLY | O_CREAT | O_TRUNC, st.st_mode);
-	if(fd_to < 0) { fprintf(stderr, "mycp: cannot open \"%s\" for writing: %s\n", from, strerror(errno)); goto error; }
+	if(fd_to < 0) { fprintf(stderr, "mycp: cannot open \"%s\" for writing: %s\n", from, strerror(errno)); close(fd_from); if(fd_to >= 0) close(fd_to); return -1; }
 
 	while(nread = read(fd_from, buf, sizeof(buf)), nread > 0) {
 		char *out_ptr = buf;
@@ -139,7 +141,9 @@ int mycp(const char *to, const char *from)
 				out_ptr += writ;
 			} else if(errno != EINTR) {
 				fprintf(stderr, "mycp: %s\n", strerror(errno));
-				goto error;
+				close(fd_from);
+				if(fd_to >= 0) close(fd_to);
+				return -2;
 			}
 		} while(nread > 0);
 	}
@@ -148,7 +152,9 @@ int mycp(const char *to, const char *from)
 		if(close(fd_to) < 0) {
 			fd_to = -1;
 			fprintf(stderr, "mycp: %s\n", strerror(errno));
-			goto error;
+			close(fd_from);
+			if(fd_to >= 0) close(fd_to);
+			return -3;
 		}
 
 		close(fd_from);
@@ -156,10 +162,8 @@ int mycp(const char *to, const char *from)
 		return 0;
 	}
 
-	error:
-
 	close(fd_from);
 	if(fd_to >= 0) close(fd_to);
 
-	return -1;
+	return 0;
 }
